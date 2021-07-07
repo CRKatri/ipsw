@@ -49,7 +49,7 @@ var apfsCmd = &cobra.Command{
 
 		a, err := apfs.Open(apfsPath)
 		if err != nil {
-			panic(err)
+			log.Fatal(err.Error())
 		}
 		defer a.Close()
 

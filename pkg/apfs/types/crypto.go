@@ -9,7 +9,7 @@ type cp_key_revision_t uint16
 type crypto_flags_t uint32
 
 type j_crypto_key_t struct {
-	Hdr j_key_t
+	Hdr JKeyT
 } // __attribute__((packed))
 
 type wrapped_crypto_state_t struct {

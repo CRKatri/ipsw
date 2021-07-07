@@ -68,7 +68,7 @@ package types
 // /** `j_file_info_key_t` **/
 
 // typedef struct {
-//     j_key_t     hdr;
+//     JKeyT     hdr;
 //     uint64_t    info_and_lba;
 // } __attribute__((packed))   j_file_info_key_t;
 

@@ -21,6 +21,37 @@ const (
 	NX_EPH_INFO_VERSION            = 1
 )
 
+type nxFeature uint64
+type nxIncompatFeature uint64
+type nxContainerFlag uint64
+
+const (
+	/** Container Flags **/
+	NX_RESERVED_1 nxContainerFlag = 0x00000001
+	NX_RESERVED_2 nxContainerFlag = 0x00000002
+	NX_CRYPTO_SW  nxContainerFlag = 0x00000004
+
+	/** Optional Container Feature Flags **/
+	NX_FEATURE_DEFRAG          nxFeature = 0x0000000000000001
+	NX_FEATURE_LCFD            nxFeature = 0x0000000000000002
+	NX_SUPPORTED_FEATURES_MASK           = (NX_FEATURE_DEFRAG | NX_FEATURE_LCFD)
+
+	/** Read-Only Compatible Container Feature Flags **/
+	NX_SUPPORTED_ROCOMPAT_MASK = 0
+
+	/** Incompatible Container Feature Flags **/
+	NX_INCOMPAT_VERSION1       nxIncompatFeature = 0x0000000000000001
+	NX_INCOMPAT_VERSION2       nxIncompatFeature = 0x0000000000000002
+	NX_INCOMPAT_FUSION         nxIncompatFeature = 0x0000000000000100
+	NX_SUPPORTED_INCOMPAT_MASK                   = (NX_INCOMPAT_VERSION2 | NX_INCOMPAT_FUSION)
+
+	/** Block and Container Size **/
+	NX_MINIMUM_BLOCK_SIZE     = 0x1000   // =    4 Ki
+	NX_DEFAULT_BLOCK_SIZE     = 0x1000   // =    4 Ki
+	NX_MAXIMUM_BLOCK_SIZE     = 0x10000  // =   64 Ki
+	NX_MINIMUM_CONTAINER_SIZE = 0x100000 // = 1024 Ki = 1 Mi
+)
+
 // NxSuperblockT nx_superblock_t struct
 type NxSuperblockT struct {
 	Obj        ObjPhysT
@@ -28,9 +59,9 @@ type NxSuperblockT struct {
 	BlockSize  uint32
 	BlockCount uint64
 
-	Features                   uint64
+	Features                   nxFeature
 	ReadonlyCompatibleFeatures uint64
-	IncompatibleFeatures       uint64
+	IncompatibleFeatures       nxIncompatFeature
 
 	UUID types.UUID
 
@@ -59,7 +90,7 @@ type NxSuperblockT struct {
 	Counters            [NX_NUM_COUNTERS]uint64
 	BlockedOutPrange    prange
 	EvictMappingTreeOid OidT
-	Flags               uint64
+	Flags               nxContainerFlag
 	EFIJumpstart        uint64
 	FusionUUID          types.UUID
 	Keylocker           prange
@@ -76,33 +107,6 @@ type NxSuperblockT struct {
 	MkbLocker prange
 }
 
-const (
-	/** Container Flags **/
-	NX_RESERVED_1 = 0x00000001
-	NX_RESERVED_2 = 0x00000002
-	NX_CRYPTO_SW  = 0x00000004
-
-	/** Optional Container Feature Flags **/
-	NX_FEATURE_DEFRAG          = 0x0000000000000001
-	NX_FEATURE_LCFD            = 0x0000000000000002
-	NX_SUPPORTED_FEATURES_MASK = (NX_FEATURE_DEFRAG | NX_FEATURE_LCFD)
-
-	/** Read-Only Compatible Container Feature Flags **/
-	NX_SUPPORTED_ROCOMPAT_MASK = 0
-
-	/** Incompatible Container Feature Flags **/
-	NX_INCOMPAT_VERSION1       = 0x0000000000000001
-	NX_INCOMPAT_VERSION2       = 0x0000000000000002
-	NX_INCOMPAT_FUSION         = 0x0000000000000100
-	NX_SUPPORTED_INCOMPAT_MASK = (NX_INCOMPAT_VERSION2 | NX_INCOMPAT_FUSION)
-
-	/** Block and Container Size **/
-	NX_MINIMUM_BLOCK_SIZE     = 0x1000   // =    4 Ki
-	NX_DEFAULT_BLOCK_SIZE     = 0x1000   // =    4 Ki
-	NX_MAXIMUM_BLOCK_SIZE     = 0x10000  // =   64 Ki
-	NX_MINIMUM_CONTAINER_SIZE = 0x100000 // = 1024 Ki = 1 Mi
-)
-
 type CheckpointDesc struct {
 	Obj  ObjPhysT
 	Body interface{}
@@ -110,7 +114,7 @@ type CheckpointDesc struct {
 
 type CheckpointMappingT struct {
 	Type    objType
-	Subtype uint32
+	Subtype objType
 	Size    uint32
 	Pad     uint32
 	FsOid   OidT
@@ -120,7 +124,7 @@ type CheckpointMappingT struct {
 
 type CheckpointMapPhysT struct {
 	Obj   ObjPhysT
-	Flags uint32
+	Flags cpMapFlag
 	Count uint32
 	// Map   []CheckpointMappingT
 }
@@ -129,9 +133,10 @@ type CheckpointMapPhys struct {
 	Hdr CheckpointMapPhysT
 	Map []CheckpointMappingT
 }
+type cpMapFlag uint32
 
 /** Checkpoint Flags **/
-const CHECKPOINT_MAP_LAST = 0x00000001
+const CHECKPOINT_MAP_LAST cpMapFlag = 0x00000001
 
 type EvictMappingValT struct {
 	DstPaddr uint64

@@ -3,7 +3,7 @@ package types
 /** `j_snap_metadata_key_t` **/
 
 // typedef struct {
-//     j_key_t     hdr;
+//     JKeyT     hdr;
 // } __attribute__((packed))   j_snap_metadata_key_t;
 
 // /** `j_snap_metadata_val_t` **/
@@ -23,7 +23,7 @@ package types
 // /** `j_snap_name_key_t` **/
 
 // typedef struct {
-//     j_key_t     hdr;
+//     JKeyT     hdr;
 //     uint16_t    name_len;
 //     uint8_t     name[0];
 // } __attribute__((packed))   j_snap_name_key_t;

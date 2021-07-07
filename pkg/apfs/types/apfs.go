@@ -6,54 +6,59 @@ import (
 	"github.com/blacktop/go-macho/types"
 )
 
+type volFlag uint64
+type volRole uint16
+type optVolFeatFlag uint64
+type incompatVolFeatFlag uint64
+
 const (
 	/** Volume Flags **/
-	APFS_FS_UNENCRYPTED            = 0x00000001
-	APFS_FS_RESERVED_2             = 0x00000002
-	APFS_FS_RESERVED_4             = 0x00000004
-	APFS_FS_ONEKEY                 = 0x00000008
-	APFS_FS_SPILLEDOVER            = 0x00000010
-	APFS_FS_RUN_SPILLOVER_CLEANER  = 0x00000020
-	APFS_FS_ALWAYS_CHECK_EXTENTREF = 0x00000040
-	APFS_FS_RESERVED_80            = 0x00000080
-	APFS_FS_RESERVED_100           = 0x00000100
+	APFS_FS_UNENCRYPTED            volFlag = 0x00000001
+	APFS_FS_RESERVED_2             volFlag = 0x00000002
+	APFS_FS_RESERVED_4             volFlag = 0x00000004
+	APFS_FS_ONEKEY                 volFlag = 0x00000008
+	APFS_FS_SPILLEDOVER            volFlag = 0x00000010
+	APFS_FS_RUN_SPILLOVER_CLEANER  volFlag = 0x00000020
+	APFS_FS_ALWAYS_CHECK_EXTENTREF volFlag = 0x00000040
+	APFS_FS_RESERVED_80            volFlag = 0x00000080
+	APFS_FS_RESERVED_100           volFlag = 0x00000100
 
 	APFS_FS_FLAGS_VALID_MASK = (APFS_FS_UNENCRYPTED | APFS_FS_RESERVED_2 | APFS_FS_RESERVED_4 | APFS_FS_ONEKEY | APFS_FS_SPILLEDOVER | APFS_FS_RUN_SPILLOVER_CLEANER | APFS_FS_ALWAYS_CHECK_EXTENTREF | APFS_FS_RESERVED_80 | APFS_FS_RESERVED_100)
 
 	APFS_FS_CRYPTOFLAGS = (APFS_FS_UNENCRYPTED | APFS_FS_ONEKEY)
 
 	/** Volume Roles **/
-	APFS_VOL_ROLE_NONE = 0x0000
+	APFS_VOL_ROLE_NONE volRole = 0x0000
 
-	APFS_VOL_ROLE_SYSTEM    = 0x0001
-	APFS_VOL_ROLE_USER      = 0x0002
-	APFS_VOL_ROLE_RECOVERY  = 0x0004
-	APFS_VOL_ROLE_VM        = 0x0008
-	APFS_VOL_ROLE_PREBOOT   = 0x0010
-	APFS_VOL_ROLE_INSTALLER = 0x0020
+	APFS_VOL_ROLE_SYSTEM    volRole = 0x0001
+	APFS_VOL_ROLE_USER      volRole = 0x0002
+	APFS_VOL_ROLE_RECOVERY  volRole = 0x0004
+	APFS_VOL_ROLE_VM        volRole = 0x0008
+	APFS_VOL_ROLE_PREBOOT   volRole = 0x0010
+	APFS_VOL_ROLE_INSTALLER volRole = 0x0020
 
 	APFS_VOLUME_ENUM_SHIFT = 6
 
-	APFS_VOL_ROLE_DATA     = (1 << APFS_VOLUME_ENUM_SHIFT) // = 0x0040 --- formerly defined explicitly as `0x0040`
-	APFS_VOL_ROLE_BASEBAND = (2 << APFS_VOLUME_ENUM_SHIFT) // = 0x0080 --- formerly defined explicitly as `0x0080`
+	APFS_VOL_ROLE_DATA     volRole = (1 << APFS_VOLUME_ENUM_SHIFT) // = 0x0040 --- formerly defined explicitly as `0x0040`
+	APFS_VOL_ROLE_BASEBAND volRole = (2 << APFS_VOLUME_ENUM_SHIFT) // = 0x0080 --- formerly defined explicitly as `0x0080`
 
 	// Roles supported since revision 2020-05-15 --- macOS 10.15+, iOS 13+
-	APFS_VOL_ROLE_UPDATE      = (3 << APFS_VOLUME_ENUM_SHIFT)  // = 0x00c0
-	APFS_VOL_ROLE_XART        = (4 << APFS_VOLUME_ENUM_SHIFT)  // = 0x0100
-	APFS_VOL_ROLE_HARDWARE    = (5 << APFS_VOLUME_ENUM_SHIFT)  // = 0x0140
-	APFS_VOL_ROLE_BACKUP      = (6 << APFS_VOLUME_ENUM_SHIFT)  // = 0x0180
-	APFS_VOL_ROLE_RESERVED_7  = (7 << APFS_VOLUME_ENUM_SHIFT)  // = 0x01c0 --- spec also uses the name `APFS_VOL_ROLE_SIDECAR`, but that could be an error
-	APFS_VOL_ROLE_RESERVED_8  = (8 << APFS_VOLUME_ENUM_SHIFT)  // = 0x0200 --- formerly named `APFS_VOL_ROLE_RESERVED_200`
-	APFS_VOL_ROLE_ENTERPRISE  = (9 << APFS_VOLUME_ENUM_SHIFT)  // = 0x0240
-	APFS_VOL_ROLE_RESERVED_10 = (10 << APFS_VOLUME_ENUM_SHIFT) // = 0x0280
-	APFS_VOL_ROLE_PRELOGIN    = (11 << APFS_VOLUME_ENUM_SHIFT) // = 0x02c0
+	APFS_VOL_ROLE_UPDATE      volRole = (3 << APFS_VOLUME_ENUM_SHIFT)  // = 0x00c0
+	APFS_VOL_ROLE_XART        volRole = (4 << APFS_VOLUME_ENUM_SHIFT)  // = 0x0100
+	APFS_VOL_ROLE_HARDWARE    volRole = (5 << APFS_VOLUME_ENUM_SHIFT)  // = 0x0140
+	APFS_VOL_ROLE_BACKUP      volRole = (6 << APFS_VOLUME_ENUM_SHIFT)  // = 0x0180
+	APFS_VOL_ROLE_RESERVED_7  volRole = (7 << APFS_VOLUME_ENUM_SHIFT)  // = 0x01c0 --- spec also uses the name `APFS_VOL_ROLE_SIDECAR`, but that could be an error
+	APFS_VOL_ROLE_RESERVED_8  volRole = (8 << APFS_VOLUME_ENUM_SHIFT)  // = 0x0200 --- formerly named `APFS_VOL_ROLE_RESERVED_200`
+	APFS_VOL_ROLE_ENTERPRISE  volRole = (9 << APFS_VOLUME_ENUM_SHIFT)  // = 0x0240
+	APFS_VOL_ROLE_RESERVED_10 volRole = (10 << APFS_VOLUME_ENUM_SHIFT) // = 0x0280
+	APFS_VOL_ROLE_PRELOGIN    volRole = (11 << APFS_VOLUME_ENUM_SHIFT) // = 0x02c0
 
 	/** Optional Volume Feature Flags **/
-	APFS_FEATURE_DEFRAG_PRERELEASE       = 0x00000001
-	APFS_FEATURE_HARDLINK_MAP_RECORDS    = 0x00000002
-	APFS_FEATURE_DEFRAG                  = 0x00000004
-	APFS_FEATURE_STRICTATIME             = 0x00000008
-	APFS_FEATURE_VOLGRP_SYSTEM_INO_SPACE = 0x00000010
+	APFS_FEATURE_DEFRAG_PRERELEASE       optVolFeatFlag = 0x00000001
+	APFS_FEATURE_HARDLINK_MAP_RECORDS    optVolFeatFlag = 0x00000002
+	APFS_FEATURE_DEFRAG                  optVolFeatFlag = 0x00000004
+	APFS_FEATURE_STRICTATIME             optVolFeatFlag = 0x00000008
+	APFS_FEATURE_VOLGRP_SYSTEM_INO_SPACE optVolFeatFlag = 0x00000010
 
 	APFS_SUPPORTED_FEATURES_MASK = (APFS_FEATURE_DEFRAG | APFS_FEATURE_DEFRAG_PRERELEASE | APFS_FEATURE_HARDLINK_MAP_RECORDS | APFS_FEATURE_STRICTATIME | APFS_FEATURE_VOLGRP_SYSTEM_INO_SPACE)
 
@@ -61,13 +66,13 @@ const (
 	APFS_SUPPORTED_ROCOMPAT_MASK = 0
 
 	/** Incompatible Volume Feature Flags **/
-	APFS_INCOMPAT_CASE_INSENSITIVE          = 0x00000001
-	APFS_INCOMPAT_DATALESS_SNAPS            = 0x00000002
-	APFS_INCOMPAT_ENC_ROLLED                = 0x00000004
-	APFS_INCOMPAT_NORMALIZATION_INSENSITIVE = 0x00000008
-	APFS_INCOMPAT_INCOMPLETE_RESTORE        = 0x00000010
-	APFS_INCOMPAT_SEALED_VOLUME             = 0x00000020
-	APFS_INCOMPAT_RESERVED_40               = 0x00000040
+	APFS_INCOMPAT_CASE_INSENSITIVE          incompatVolFeatFlag = 0x00000001
+	APFS_INCOMPAT_DATALESS_SNAPS            incompatVolFeatFlag = 0x00000002
+	APFS_INCOMPAT_ENC_ROLLED                incompatVolFeatFlag = 0x00000004
+	APFS_INCOMPAT_NORMALIZATION_INSENSITIVE incompatVolFeatFlag = 0x00000008
+	APFS_INCOMPAT_INCOMPLETE_RESTORE        incompatVolFeatFlag = 0x00000010
+	APFS_INCOMPAT_SEALED_VOLUME             incompatVolFeatFlag = 0x00000020
+	APFS_INCOMPAT_RESERVED_40               incompatVolFeatFlag = 0x00000040
 
 	APFS_SUPPORTED_INCOMPAT_MASK = (APFS_INCOMPAT_CASE_INSENSITIVE | APFS_INCOMPAT_DATALESS_SNAPS | APFS_INCOMPAT_ENC_ROLLED | APFS_INCOMPAT_NORMALIZATION_INSENSITIVE | APFS_INCOMPAT_INCOMPLETE_RESTORE | APFS_INCOMPAT_SEALED_VOLUME | APFS_INCOMPAT_RESERVED_40)
 )
@@ -100,9 +105,9 @@ type ApfsSuperblockT struct {
 	Magic   magic
 	FsIndex uint32
 
-	Features                   uint64
+	Features                   optVolFeatFlag
 	ReadonlyCompatibleFeatures uint64
-	IncompatibleFeatures       uint64
+	IncompatibleFeatures       incompatVolFeatFlag
 
 	UnmountTime EpochTime
 
@@ -112,9 +117,9 @@ type ApfsSuperblockT struct {
 
 	MetaCrypto wrapped_meta_crypto_state_t
 
-	RootTreeType      uint32
-	ExtentrefTreeType uint32
-	SnapMetaTreeType  uint32
+	RootTreeType      objType
+	ExtentrefTreeType objType
+	SnapMetaTreeType  objType
 
 	OmapOid          OidT
 	RootTreeOid      OidT
@@ -138,7 +143,7 @@ type ApfsSuperblockT struct {
 	VolumeUUID  types.UUID
 	LastModTime EpochTime
 
-	FsFlags uint64
+	FsFlags volFlag
 
 	FormattedBy apfs_modified_by_t
 	ModifiedBy  [APFS_MAX_HIST]apfs_modified_by_t
@@ -146,7 +151,7 @@ type ApfsSuperblockT struct {
 	VolumeName [APFS_VOLNAME_LEN]byte
 	NextDocID  uint32
 
-	Role     uint16
+	Role     volRole
 	Reserved uint16
 
 	RootToXid  XidT
@@ -167,7 +172,7 @@ type ApfsSuperblockT struct {
 	// Fields supported on macOS 11+
 	IntegrityMetaOid OidT
 	FextTreeOid      OidT
-	FextTreeType     uint32
+	FextTreeType     objType
 
 	ReservedType uint32
 	ReservedOid  OidT

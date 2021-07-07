@@ -87,7 +87,7 @@ type ObjPhysT struct {
 	Oid     OidT
 	Xid     XidT
 	Type    objType
-	Subtype uint32
+	Subtype objType
 }
 
 func (o ObjPhysT) GetType() objType {

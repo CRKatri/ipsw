@@ -3,7 +3,7 @@ package types
 // /** `j_phys_ext_key_t` **/
 
 // typedef struct {
-//     j_key_t     hdr;
+//     JKeyT     hdr;
 // } __attribute__((packed))   j_phys_ext_key_t;
 
 // /** `j_phys_ext_val_t` **/
@@ -21,7 +21,7 @@ package types
 // /** `j_file_extent_key_t` **/
 
 // typedef struct {
-//     j_key_t     hdr;
+//     JKeyT     hdr;
 //     uint64_t    logical_addr;
 // } __attribute__((packed))   j_file_extent_key_t;
 
@@ -40,7 +40,7 @@ package types
 // /** `j_dstream_id_key_t` **/
 
 // typedef struct {
-//     j_key_t     hdr;
+//     JKeyT     hdr;
 // } __attribute__((packed))   j_dstream_id_key_t;
 
 // /** `j_dstream_id_val_t` **/

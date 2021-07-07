@@ -146,7 +146,8 @@ const (
 	DT_WHT     = 14
 )
 
-type j_key_t struct {
+// JKeyT is a j_key_t
+type JKeyT struct {
 	ObjIDAndType uint64
 } // __attribute__((packed))
 
@@ -159,7 +160,7 @@ const (
 )
 
 type j_inode_key_t struct {
-	Hdr j_key_t
+	Hdr JKeyT
 } // __attribute__((packed))
 
 type uid_t uint32
@@ -192,7 +193,7 @@ type j_inode_val_t struct {
 } // __attribute__((packed))
 
 type j_drec_key_t struct {
-	Hdr     j_key_t
+	Hdr     JKeyT
 	NameLen uint16 // NOTE: Not `name_len_and_hash` as the spec erroneously says.
 	Name    [0]uint8
 } // __attribute__((packed))
@@ -216,7 +217,7 @@ type j_drec_key_t struct {
  */
 
 type j_drec_hashed_key_t struct {
-	Hdr            j_key_t
+	Hdr            JKeyT
 	NameLenAndHash uint32
 	Name           [0]uint8
 } // __attribute__((packed))
@@ -235,7 +236,7 @@ type j_drec_val_t struct {
 } // __attribute__((packed))
 
 type j_dir_stats_key_t struct {
-	Hdr j_key_t
+	Hdr JKeyT
 } // __attribute__((packed))
 
 type j_dir_stats_val_t struct {
@@ -246,7 +247,7 @@ type j_dir_stats_val_t struct {
 } // __attribute__((packed))
 
 type j_xattr_key_t struct {
-	Hdr     j_key_t
+	Hdr     JKeyT
 	NameLen uint16
 	Name    [0]uint8
 } // __attribute__((packed))

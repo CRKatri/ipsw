@@ -2,24 +2,28 @@ package types
 
 import "math"
 
+type omapValFlag uint32
+type omapSnapshotFlag uint32
+type omapFlag uint32
+
 const (
 	/** Object Map Value Flags **/
-	OMAP_VAL_DELETED           = 0x00000001
-	OMAP_VAL_SAVED             = 0x00000002
-	OMAP_VAL_ENCRYPTED         = 0x00000004
-	OMAP_VAL_NOHEADER          = 0x00000008
-	OMAP_VAL_CRYPTO_GENERATION = 0x00000010
+	OMAP_VAL_DELETED           omapValFlag = 0x00000001
+	OMAP_VAL_SAVED             omapValFlag = 0x00000002
+	OMAP_VAL_ENCRYPTED         omapValFlag = 0x00000004
+	OMAP_VAL_NOHEADER          omapValFlag = 0x00000008
+	OMAP_VAL_CRYPTO_GENERATION omapValFlag = 0x00000010
 
 	/** Snapshot Flags **/
-	OMAP_SNAPSHOT_DELETED  = 0x00000001
-	OMAP_SNAPSHOT_REVERTED = 0x00000002
+	OMAP_SNAPSHOT_DELETED  omapSnapshotFlag = 0x00000001
+	OMAP_SNAPSHOT_REVERTED omapSnapshotFlag = 0x00000002
 
 	/** Object Map Flags **/
-	OMAP_MANUALLY_MANAGED  = 0x00000001
-	OMAP_ENCRYPTING        = 0x00000002
-	OMAP_DECRYPTING        = 0x00000004
-	OMAP_KEYROLLING        = 0x00000008
-	OMAP_CRYPTO_GENERATION = 0x00000010
+	OMAP_MANUALLY_MANAGED  omapFlag = 0x00000001
+	OMAP_ENCRYPTING        omapFlag = 0x00000002
+	OMAP_DECRYPTING        omapFlag = 0x00000004
+	OMAP_KEYROLLING        omapFlag = 0x00000008
+	OMAP_CRYPTO_GENERATION omapFlag = 0x00000010
 
 	OMAP_VALID_FLAGS = 0x0000001f
 
@@ -34,10 +38,10 @@ const (
 // OmapPhysT is a omap_phys_t struct
 type OmapPhysT struct {
 	Obj              ObjPhysT
-	Flags            uint32
+	Flags            omapFlag
 	SnapCount        uint32
-	TreeType         uint32
-	SnapshotTreeType uint32
+	TreeType         objType
+	SnapshotTreeType objType
 	TreeOid          OidT
 	SnapshotTreeOid  OidT
 	MostRecentSnap   XidT
@@ -53,13 +57,13 @@ type OMapKey struct {
 
 // OMapVal is a omap_val_t struct
 type OMapVal struct {
-	Flags uint32
+	Flags omapValFlag
 	Size  uint32
 	Paddr uint64
 }
 
 type omap_snapshot_t struct {
-	Flags uint32
+	Flags omapSnapshotFlag
 	Pad   uint32
 	Oid   OidT
 }

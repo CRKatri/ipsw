@@ -3,7 +3,7 @@ package types
 /** `j_sibling_key_t` **/
 
 // typedef struct {
-//     j_key_t     hdr;
+//     JKeyT     hdr;
 //     uint64_t    sibling_id;
 // } __attribute__((packed))   j_sibling_key_t;
 
@@ -18,7 +18,7 @@ package types
 // /** `j_sibling_map_key_t` **/
 
 // typedef struct {
-//     j_key_t     hdr;
+//     JKeyT     hdr;
 // } __attribute__((packed))   j_sibling_map_key_t;
 
 // /** `j_sibling_map_val_t` **/
