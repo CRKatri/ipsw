@@ -13,9 +13,9 @@ import (
 	"os"
 
 	"github.com/apex/log"
-	lzfse "github.com/blacktop/go-lzfse"
 	"github.com/blacktop/go-macho/types"
 	"github.com/blacktop/go-plist"
+	"github.com/blacktop/ipsw/pkg/lzfse"
 )
 
 // DMG apple disk image object
@@ -273,7 +273,11 @@ func (b *UDIFBlockData) DecompressChunks(w *bufio.Writer) error {
 			if _, err := b.sr.ReadAt(buff, int64(chunk.CompressedOffset)); err != nil {
 				return err
 			}
-			n, err = w.Write(lzfse.DecodeBuffer(buff))
+			dec, err := lzfse.NewDecoder(buff).DecodeBuffer() // FIXME: this is slow as sh1zzzzzz
+			if err != nil {
+				return err
+			}
+			n, err = w.Write(dec)
 			if err != nil {
 				return err
 			}
